@@ -6,7 +6,7 @@ import ProductItem from '../components/ProductItem';
 
 const Collection = () => {
 
-  const { products } = useContext(ShopContext);
+  const { products ,search, showSearch} = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [category, setCategory] = useState([]);
@@ -34,6 +34,10 @@ const Collection = () => {
   // Apply filter
   const applyFilter = () => {
     let productsCopy = products.slice();
+
+    if(showSearch && search){
+      productsCopy = productsCopy.filter(item=> item.name.toLowerCase().includes(search.toLowerCase()))
+    }
 
     if (category.length > 0) {
       productsCopy = productsCopy.filter(item => category.includes(item.category));
@@ -71,7 +75,7 @@ case 'high-low':
   // apply filter when category or subcategory changes
   useEffect(() => {
     applyFilter();   // ✅ call the function
-  }, [category, subCategory])
+  }, [category, subCategory,search,showSearch])
 
   useEffect(()=>{
 sortProduct();
@@ -133,7 +137,7 @@ sortProduct();
 
           {/* Product sort */}
           <select onChange={(e)=>setSortType(e.target.value) }className='border-gray-300 text-sm px-2'>
-            <option value="relavent">Sort by : Relevant</option>
+            <option value="relavant">Sort by : Relevant</option>
             <option value="low-high">Sort by : low-high</option>
             <option value="high-low">Sort by : high-low</option>
           </select>
